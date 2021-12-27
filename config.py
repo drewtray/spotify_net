@@ -1,3 +1,4 @@
 # .gitignore should include reference to config.py
 CLIENT_ID = 'eb29ce813d4147f2b9bf396bb353c0e9'
 CLIENT_SECRET = '5ef5cb82b42f42d381fd11a4d98ab216'
+AUTH_CODE = 'AQAvmsy5SYa_grq9dTa6zL91q3iPl_VOJFJl0ezcjb5lLqUwRQfwPuybehq8snbflUwuBNJKNfsd5R0WfeRYgfYrBoAwrX_ksXSgkUypkTm6Waji6JneFE7SfW6qZeq1-N7RBfbN3tiu5WmHpcPujIhMFuaeCb9N1oWRo6vkvbwJdKPyZvcXwYd_eGzjR43LpUjCqFNd1USEZA'
