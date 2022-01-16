@@ -8,6 +8,7 @@ import base64
 import json
 import pandas as pd
 import boto3
+import math
 
 # Cell
 try:
@@ -44,14 +45,27 @@ def handler(event, context):
     transformed = prep.dummies_and_scale(merged_df, 0.0000001, s3_objects['scaler'])
     _ = prep.full_frame(transformed, s3_objects['gen_series'], s3_objects['svd'], s3_objects['key_series'], s3_objects['time_series'])
 
-    # Get predictions, add, and delete
+    # Get predictions
     df = hit.load_s3()
     name_frame = df[['name', 'uri', 'artist']].copy()
     df_json = hit.prep_frame(df)
-    predictions = hit.make_request(f'http://127.0.0.1:8000/model/{df_json}')
-    name_frame['prediction'] = predictions
+
+    df_list = []
+    index=0
+    for i in range(math.ceil(len(df)/3)):
+        temp_json = hit.prep_frame(df.iloc[index:index+3])
+        preds = requests.post(f'https://72fe4ffwc6.execute-api.us-east-1.amazonaws.com/dev/model/{temp_json}')
+        preds = pd.read_json(preds.json()[0])
+        index += 3
+        df_list.append(preds)
+
+    pred_frame = pd.concat(t_list, ignore_index=True)
+    pred_frame = pred_frame.rename(columns={0:'predictions'})
+    name_frame = pd.concat([name_frame, pred_frame], axis=1)
     name_frame = name_frame.iloc[:2]
     print(name_frame)
+
+    # Add to playlist, delete from net
     client_id, client_secret, access_token, refresh_token = hit.cred()
     _ = hit.add_tracks(name_frame, client_id, client_secret, access_token, refresh_token)
     _ = hit.delete_tracks(name_frame, client_id, client_secret, access_token, refresh_token)
