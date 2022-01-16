@@ -8,8 +8,8 @@ FROM public.ecr.aws/lambda/python:3.8
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
-# COPY spotify_35/ spot_tokens.json .
-COPY spotify_35/ .
+# COPY spotify_net/ spot_tokens.json .
+COPY spotify_net/ .
 
 # CMD ["python3", "lambda.py"]
 CMD ["lambda.handler"]
