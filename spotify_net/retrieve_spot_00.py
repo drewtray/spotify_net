@@ -119,10 +119,11 @@ def get_tracks(p_id, access_token, refresh_token, client_id, client_secret):
     index = 0
     temp_list = artist_list[index: index+50]
 
-    for i in range(round(len(artist_list)/50)):
+    for i in range(math.ceil(len(artist_list)/50)):
         artist_join = ','.join(temp_list)
         art_url = f'https://api.spotify.com/v1/artists?ids={artist_join}'
         r_art = requests.get(art_url, headers=headers)
+        print(r_art.status_code)
 
         try:
             g = [i['genres'] for i in r_art.json()['artists']]

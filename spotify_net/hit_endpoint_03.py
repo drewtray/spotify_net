@@ -40,7 +40,7 @@ def make_request(endpoint):
 
 # Cell
 p_dict = {
-    'DONNA':'0ZSKsOlj7QFX9LstS7fk39?',
+    'DONNA':'0ZSKsOlj7QFX9LstS7fk39',
     'Flowgurt':'1gM83cehv98l8cdMnZmk5N',
     'Four K':'2b6mA2TxfNjdnKH7mvgZIh',
     'Intermission Expedition':'4U9dVZ97mizvT2FBjx3fGx',
@@ -71,7 +71,7 @@ def cred():
 # Cell
 def add_tracks(name_frame, client_id, client_secret, access_token, refresh_token):
 
-    for track, prediction in zip(name_frame['uri'], name_frame['prediction']):
+    for track, prediction in zip(name_frame['uri'], name_frame['predictions']):
         target_playlist = p_dict[prediction]
 
         headers = {
@@ -166,7 +166,7 @@ if __name__ == '__main__':
     name_frame = df[['name', 'uri', 'artist']].copy()
     df_json = prep_frame(df)
     predictions = make_request(f'http://127.0.0.1:8000/model/{df_json}')
-    name_frame['prediction'] = predictions
+    name_frame['predictions'] = predictions
     name_frame = name_frame.iloc[:2]
     client_id, client_secret, access_token, refresh_token = cred()
     _ = add_tracks(name_frame, client_id, client_secret, access_token, refresh_token)

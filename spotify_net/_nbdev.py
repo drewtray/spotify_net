@@ -18,13 +18,13 @@ index = {"cred": "retrieve_public.ipynb",
          "p_dict": "03_hit_endpoint.ipynb",
          "add_tracks": "03_hit_endpoint.ipynb",
          "delete_tracks": "03_hit_endpoint.ipynb",
-         "handler": "04_lambda.ipynb"}
+         "handler": "lambda.ipynb"}
 
 modules = ["retrieve_spot_00.py",
            "retrieve_last_01.py",
            "prepModel_02.py",
            "hit_endpoint_03.py",
-           "lambda_04.py",
+           "lambda.py",
            "retrieve_public.py"]
 
 doc_url = "https://drewtray.github.io/spotify_net/"
