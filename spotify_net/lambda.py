@@ -29,7 +29,7 @@ def handler(event, context):
     # Get spotify tracks
     c_id, c_secret, a_token, r_token = spot.cred()
     o_tracks = spot.get_tracks('3ubgXaHeBn1CWLUZPXvqkj', a_token, r_token, c_id, c_secret)
-    n_tracks = spot.track_reduce(o_tracks, include=30)
+    n_tracks = spot.track_reduce(o_tracks, include=7)
     n_tracks.to_csv('s3://spotify-net/newer_tracks.csv')
     _ = spot.update('3ubgXaHeBn1CWLUZPXvqkj', a_token, r_token, c_id, c_secret, o_tracks, n_tracks)
     print('Retrieved net from Spotify')
