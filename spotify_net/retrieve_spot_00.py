@@ -88,6 +88,7 @@ def get_tracks(p_id, access_token, refresh_token, client_id, client_secret):
         df_t = pd.DataFrame({
             'added at': pd.to_datetime(track_added),
             'id': track_ids,
+            # 'uri': track_uris,
             'name': track_names,
             'artist': track_artists,
             'artist id': artist_id,
@@ -151,7 +152,7 @@ def get_tracks(p_id, access_token, refresh_token, client_id, client_secret):
     return df_tracks
 
 # Cell
-def track_reduce(d_tracks, include=30):
+def track_reduce(d_tracks, include=7):
     d_tracks = d_tracks.sort_values('added at')
     today = date.today()
     today = pd.to_datetime(today, utc=True)
@@ -172,7 +173,7 @@ def update(p_id, access_token, refresh_token, client_id, client_secret, o_tracks
 
     DELETE_URL = f'https://api.spotify.com/v1/playlists/{p_id}/tracks'
 
-    to_delete = o_tracks.loc[~o_tracks['id'].isin(n_tracks['id']), 'id'].tolist()
+    to_delete = o_tracks.loc[~o_tracks['id'].isin(n_tracks['id']), 'uri'].tolist()
 
     x = len(to_delete)
     y = math.ceil(x/100)
@@ -227,12 +228,13 @@ def update(p_id, access_token, refresh_token, client_id, client_secret, o_tracks
                     del_dict = {'tracks': del_uri}
 
                     r_delete = requests.delete(DELETE_URL, headers=headers, data=json.dumps(del_dict))
+                    print(r_delete.status_code)
 
 # Cell
 if __name__ == '__main__':
     c_id, c_secret, a_token, r_token = cred()
     o_tracks = get_tracks('3ubgXaHeBn1CWLUZPXvqkj', a_token, r_token, c_id, c_secret)
-    n_tracks = track_reduce(o_tracks, include=30)
+    n_tracks = track_reduce(o_tracks, include=7)
     n_tracks.to_csv('s3://spotify-net/newer_tracks.csv')
     _ = update('3ubgXaHeBn1CWLUZPXvqkj', a_token, r_token, c_id, c_secret, o_tracks, n_tracks)
     print('Updated')
