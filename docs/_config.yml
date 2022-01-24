@@ -1,7 +1,7 @@
-repository: drewtray/spotify_35
+repository: drewtray/spotify_net
 output: web
-topnav_title: spotify_35
-site_title: spotify_35
+topnav_title: spotify_net
+site_title: spotify_net
 company_name: Drew Traylor
 description: Classify tracks from a "catch-all" playlist
 # Set to false to disable KaTeX math
