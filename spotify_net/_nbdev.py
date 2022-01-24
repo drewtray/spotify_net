@@ -2,7 +2,7 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"cred": "retrieve_public.ipynb",
+index = {"cred": "03_hit_endpoint.ipynb",
          "get_tracks": "00_retrieve_spot.ipynb",
          "track_reduce": "00_retrieve_spot.ipynb",
          "update": "00_retrieve_spot.ipynb",
@@ -24,8 +24,7 @@ modules = ["retrieve_spot_00.py",
            "retrieve_last_01.py",
            "prepModel_02.py",
            "hit_endpoint_03.py",
-           "lambda.py",
-           "retrieve_public.py"]
+           "lambda.py"]
 
 doc_url = "https://drewtray.github.io/spotify_net/"
 
