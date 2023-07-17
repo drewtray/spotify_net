@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "spotify_net"
+  site-url: "https://drewtray.github.io/spotify_net"
+  description: "classify from one temporary playlist"
+  repo-branch: master
+  repo-url: "https://github.com/drewtray/spotify_net"
