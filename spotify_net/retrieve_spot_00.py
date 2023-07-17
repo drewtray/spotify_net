@@ -102,7 +102,6 @@ def get_tracks(p_id, access_token, refresh_token, client_id, client_secret):
         feat_url = f'https://api.spotify.com/v1/audio-features?limit=100&offset={offset}&ids={join_ids}'
         r_feat = requests.get(feat_url, headers=headers)
         feat_frame = pd.DataFrame(r_feat.json()['audio_features'])
-
         df_t = pd.merge(df_t, feat_frame, on='id')
         df_tracks = df_tracks.append(df_t)
 
@@ -148,7 +147,7 @@ def get_tracks(p_id, access_token, refresh_token, client_id, client_secret):
     df_tracks = df_tracks.drop('genre', axis=1)
     df_tracks = pd.concat([df_tracks, genre_bin], axis=1)
 
-
+    
     return df_tracks
 
 # Cell
@@ -163,7 +162,6 @@ def track_reduce(d_tracks, include=7):
 
     return d_tracks
 
-
 # Cell
 def update(p_id, access_token, refresh_token, client_id, client_secret, o_tracks, n_tracks):
 
@@ -176,7 +174,7 @@ def update(p_id, access_token, refresh_token, client_id, client_secret, o_tracks
     to_delete = o_tracks.loc[~o_tracks['id'].isin(n_tracks['id']), 'uri'].tolist()
 
     x = len(to_delete)
-    y = math.ceil(x/100)
+    y = math.ceil(x/100)    
     # r_delete = None
 
     if x != 0:
@@ -188,7 +186,6 @@ def update(p_id, access_token, refresh_token, client_id, client_secret, o_tracks
                     {'uri': i}
                 )
             del_dict = {'tracks': del_uri}
-
             r_delete = requests.delete(DELETE_URL, headers=headers, data=json.dumps(del_dict))
 
         if r_delete.status_code == 401:
@@ -237,4 +234,4 @@ if __name__ == '__main__':
     n_tracks = track_reduce(o_tracks, include=7)
     n_tracks.to_csv('s3://spotify-net/newer_tracks.csv')
     _ = update('3ubgXaHeBn1CWLUZPXvqkj', a_token, r_token, c_id, c_secret, o_tracks, n_tracks)
-    print('Updated')
+    print('Updated')    

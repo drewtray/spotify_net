@@ -4,7 +4,7 @@
     "retrieval from net": "retrieve_spot.html",
     "retrieval from last FM": "retrieve_last.html",
     "Update spotify net/assign tracks": "prepModel.html",
-    "Title": "hit_endpoint.html",
+    "Model code": "hit_endpoint.html",
     "lambda": "lambda.html"
   }
 }

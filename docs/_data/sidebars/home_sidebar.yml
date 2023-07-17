@@ -19,7 +19,7 @@ entries:
       title: Update spotify net/assign tracks
       url: prepModel.html
     - output: web,pdf
-      title: Title
+      title: Model code
       url: hit_endpoint.html
     - output: web,pdf
       title: lambda
