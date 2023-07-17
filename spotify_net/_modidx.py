@@ -5,4 +5,11 @@ d = { 'settings': { 'branch': 'master',
                 'doc_host': 'https://drewtray.github.io',
                 'git_url': 'https://github.com/drewtray/spotify_net',
                 'lib_path': 'spotify_net'},
-  'syms': {'spotify_net.core': {'spotify_net.core.foo': ('core.html#foo', 'spotify_net/core.py')}}}
+  'syms': { 'spotify_net.retrieve_spotify_data': { 'spotify_net.retrieve_spotify_data.cred': ( 'retrieve_spotify_data.html#cred',
+                                                                                               'spotify_net/retrieve_spotify_data.py'),
+                                                   'spotify_net.retrieve_spotify_data.get_tracks': ( 'retrieve_spotify_data.html#get_tracks',
+                                                                                                     'spotify_net/retrieve_spotify_data.py'),
+                                                   'spotify_net.retrieve_spotify_data.track_reduce': ( 'retrieve_spotify_data.html#track_reduce',
+                                                                                                       'spotify_net/retrieve_spotify_data.py'),
+                                                   'spotify_net.retrieve_spotify_data.update': ( 'retrieve_spotify_data.html#update',
+                                                                                                 'spotify_net/retrieve_spotify_data.py')}}}
