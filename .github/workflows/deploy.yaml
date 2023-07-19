@@ -3,6 +3,7 @@ name: Deploy to GitHub Pages
 permissions:
   contents: write
   pages: write
+  id-token: write # This is required for requesting the JWT
 
 on:
   push:
@@ -11,4 +12,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps: [uses: fastai/workflows/quarto-ghp@master]
+    steps: 
+      - uses: fastai/workflows/quarto-ghp@master
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::569206664605:role/github-actions-secrets
+          aws-region: us-east-2
