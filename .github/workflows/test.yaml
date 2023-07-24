@@ -1,6 +1,11 @@
 name: CI
 on:  [workflow_dispatch, pull_request, push]
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write # This is required for requesting the JWT
+
 jobs:
   test:
     runs-on: ubuntu-latest
