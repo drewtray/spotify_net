@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['SpotifyAPI']
 
-# %% ../nbs/00_retrieve_spotify_data.ipynb 3
+# %% ../nbs/00_retrieve_spotify_data.ipynb 4
 import requests
 import base64
 import json
@@ -14,18 +14,33 @@ import os
 
 from datetime import date, timedelta
 
-# %% ../nbs/00_retrieve_spotify_data.ipynb 4
+# %% ../nbs/00_retrieve_spotify_data.ipynb 5
 class SpotifyAPI:
     
-    # do I want to initialize this list with the innstance of leave as-is?
     required_env_keys = ['spot_clientID', 'spot_clientSECRET', 'spot_ACC', 'spot_REF']
 
     def __init__(self, region_name):
+        """
+        Initializes a new instance of the SpotifyAPI class.
+
+        Parameters
+        ----------
+        region_name : str
+            The name of the AWS region where the secrets manager is located.
+        """
         self.region_name = region_name
         self.playlist_id = None
         self.df_tracks = pd.DataFrame()
-        
+    
     def get_secret(self, secret_name):
+        """
+        Retrieves the specified secret from AWS Secrets Manager and sets the corresponding environment variables.
+
+        Parameters
+        ----------
+        secret_name : str
+            The name of the secret to retrieve.
+        """
         if all([k in os.environ.keys() for k in self.required_env_keys]):
             print('All required environment variables are set')
         else:
@@ -42,11 +57,22 @@ class SpotifyAPI:
                 os.environ[k] = v
 
     def create_headers(self):
+        """
+        Creates the headers required for making requests to the Spotify API.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the required headers.
+        """
         return {
             'Authorization': f'Bearer {os.environ.get("spot_ACC")}'
         }
 
     def refresh_token(self):
+        """
+        Refreshes the access token required for making requests to the Spotify API.
+        """
         TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
         message = os.environ.get('spot_clientID') + ':' + os.environ.get('spot_clientSECRET')
@@ -70,6 +96,21 @@ class SpotifyAPI:
         os.environ['spot_ACC'] = access_token
 
     def get_track_subset(self, playlist_id, offset):
+        """
+        Retrieves a subset of tracks from the specified Spotify playlist.
+
+        Parameters
+        ----------
+        playlist_id : str
+            The ID of the Spotify playlist to retrieve tracks from.
+        offset : int
+            The offset to use when retrieving tracks.
+
+        Returns
+        -------
+        list
+            A list of track items.
+        """
         track_url = f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100&offset={offset}'
         headers = self.create_headers()
         track_subset = requests.get(track_url, headers=headers)
@@ -82,31 +123,56 @@ class SpotifyAPI:
         return track_subset.json()['items']
     
     def get_subset_features(self, track_items):
-            track_ids = [t['track']['id'] for t in track_items]
-            track_names = [t['track']['name'] for t in track_items]
-            track_added = [t['added_at'] for t in track_items]
-            track_artists = [t['track']['artists'][0]['name'] for t in track_items]
-            artist_id = [t['track']['artists'][0]['id'] for t in track_items]
+        """
+        Given a list of track items, returns a pandas DataFrame containing information about each track, including the track ID, name, artist, artist ID, and audio features such as danceability, energy, and tempo.
 
-            track_info = pd.DataFrame({
-                'added at': pd.to_datetime(track_added),
-                'id': track_ids,
-                'name': track_names,
-                'artist': track_artists,
-                'artist id': artist_id,
+        Parameters
+        ----------
+        track_items : list
+            A list of track items, where each item is a dictionary containing information about a track.
+
+        Returns
+        -------
+        pandas.DataFrame
+            A DataFrame containing information about each track, including the track ID, name, artist, artist ID, and audio features such as danceability, energy, and tempo.
+        """
+        track_ids = [t['track']['id'] for t in track_items]
+        track_names = [t['track']['name'] for t in track_items]
+        track_added = [t['added_at'] for t in track_items]
+        track_artists = [t['track']['artists'][0]['name'] for t in track_items]
+        artist_id = [t['track']['artists'][0]['id'] for t in track_items]
+
+        track_info = pd.DataFrame({
+            'added at': pd.to_datetime(track_added),
+            'id': track_ids,
+            'name': track_names,
+            'artist': track_artists,
+            'artist id': artist_id,
             })
 
-            track_id_list = ','.join(track_ids)
-            feat_url = f'https://api.spotify.com/v1/audio-features?ids={track_id_list}'
-            headers = self.create_headers()
-            r_feat = requests.get(feat_url, headers=headers)
-            feat_frame = pd.DataFrame(r_feat.json()['audio_features'])
-            track_features = pd.concat([track_info, feat_frame], axis=1)
+        track_id_list = ','.join(track_ids)
+        feat_url = f'https://api.spotify.com/v1/audio-features?ids={track_id_list}'
+        headers = self.create_headers()
+        r_feat = requests.get(feat_url, headers=headers)
+        feat_frame = pd.DataFrame(r_feat.json()['audio_features'])
+        track_features = pd.concat([track_info, feat_frame], axis=1)
 
-            return track_features 
+        return track_features 
 
     def get_playlist_features(self, playlist_id):
-        
+        """
+        Given a Spotify playlist ID, returns a pandas DataFrame containing information about all the tracks in the playlist, including the track ID, name, artist, artist ID, and audio features such as danceability, energy, and tempo.
+
+        Parameters
+        ----------
+        playlist_id : str
+            The ID of the Spotify playlist.
+
+        Returns
+        -------
+        pandas.DataFrame
+            A DataFrame containing information about all the tracks in the playlist, including the track ID, name, artist, artist ID, and audio features such as danceability, energy, and tempo.
+        """
         offset = 0
 
         while True:
@@ -122,15 +188,31 @@ class SpotifyAPI:
 
     
     def get_artist_info(self, df_tracks, headers):
+        """
+        """
         pass
 
     def process_genres(self, df_tracks):
+        """
+        """
         pass
 
     def parse_new_tracks(self, lookback_days=7):
         """
-        Sorts tracks based on when they were added. Filters out tracks added more than 'lookback_days' ago.
-        Returns the original DataFrame of tracks.
+        Sorts tracks based on when they were added and filters out tracks added more than 'lookback_days' ago.
+        Returns two DataFrames: one containing the new tracks added within the lookback period, and one containing the old tracks added before the lookback period.
+
+        Parameters
+        ----------
+        lookback_days : int, optional
+            The number of days to look back for new tracks. Defaults to 7.
+
+        Returns
+        -------
+        pandas.DataFrame
+            A DataFrame containing the old tracks added before the lookback period.
+        pandas.DataFrame
+            A DataFrame containing the new tracks added within the lookback period.
         """
         self.df_tracks = self.df_tracks.sort_values('added at')
         today = pd.to_datetime(date.today(), utc=True)
@@ -148,7 +230,15 @@ class SpotifyAPI:
     def delete_tracks(self, tracks_to_delete):
         """
         Deletes a batch of tracks from a Spotify playlist.
-        Accepts a DataFrame of tracks to delete
+
+        Parameters
+        ----------
+        tracks_to_delete : pandas.DataFrame
+            A DataFrame containing the tracks to be deleted, where each row represents a track and contains a 'uri' column with the URI of the track.
+
+        Returns
+        -------
+        None
         """
         to_delete = tracks_to_delete['uri'].tolist()  # Assuming 'uri' is the column name in your DataFrame
         num_tracks = len(to_delete)
@@ -162,7 +252,9 @@ class SpotifyAPI:
             DELETE_URL = f'https://api.spotify.com/v1/playlists/{self.playlist_id}/tracks'
             r_delete = requests.delete(DELETE_URL, data=json.dumps(del_dict))
 
-# %% ../nbs/00_retrieve_spotify_data.ipynb 5
+
+
+# %% ../nbs/00_retrieve_spotify_data.ipynb 14
 if __name__ == '__main__':
     spot = SpotifyAPI('us-east-2')
     spot.get_secret('spotify_35')
