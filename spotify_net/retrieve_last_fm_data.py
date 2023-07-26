@@ -19,20 +19,6 @@ class LastFmAPI:
     ----------
     region_name : str
         The name of the AWS region where the secrets manager is located.
-
-    Attributes
-    ----------
-    region_name : str
-        The name of the AWS region where the secrets manager is located.
-
-    Methods
-    -------
-    get_secret(secret_name)
-        Retrieves the specified secret from AWS Secrets Manager and sets the corresponding environment variables.
-
-    get_top_tracks(period='1month', playcount_cutoff=1)
-        Retrieves the top tracks for the user.
-
     """
     required_env_keys = ['spot_clientID', 'spot_clientSECRET', 'spot_ACC', 'spot_REF']
 
@@ -114,3 +100,11 @@ class LastFmAPI:
 
         return tracks
 
+
+# %% ../nbs/01_retrieve_last.ipynb 8
+if __name__ == '__main__':
+    last = LastFmAPI('us-east-1')
+    last.get_secret('last_keys')
+    tracks = last.get_top_tracks()
+    tracks.to_csv('s3://spotify-net/last_fm_recent_tracks.csv')
+    print('Retrieved')

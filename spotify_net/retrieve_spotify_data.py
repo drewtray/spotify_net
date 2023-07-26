@@ -11,12 +11,23 @@ import pandas as pd
 import boto3
 import math
 import os
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from datetime import date, timedelta
 
 # %% ../nbs/00_retrieve_spotify_data.ipynb 5
 class SpotifyAPI:
-    
+    """
+    A class for interacting with the Spotify API.
+
+    Parameters
+    ----------
+    region_name : str
+        The name of the AWS region where the secrets manager is located.
+    playlist_id : str
+        The ID of the Spotify playlist.
+    """
     required_env_keys = ['spot_clientID', 'spot_clientSECRET', 'spot_ACC', 'spot_REF']
 
     def __init__(self, region_name):
