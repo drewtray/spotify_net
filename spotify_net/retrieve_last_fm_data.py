@@ -57,7 +57,7 @@ class LastFmAPI:
             for k, v in secret_dict.items():
                 os.environ[k] = v
 
-    def get_top_tracks(self, period='1month', playcount_cutoff=1):
+    def get_top_tracks(self, period='1month', playcount_cutoff=5):
         """
         Retrieves the top tracks for the user.
 
