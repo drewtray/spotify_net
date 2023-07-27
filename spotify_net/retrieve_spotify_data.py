@@ -162,6 +162,7 @@ class SpotifyAPI:
             })
 
         track_id_list = ','.join(track_ids)
+        # TODO: look into 'Audio Analysis' endpoint: https://developer.spotify.com/documentation/web-api/reference/get-audio-analysis
         feat_url = f'https://api.spotify.com/v1/audio-features?ids={track_id_list}'
         headers = self.create_headers()
         r_feat = requests.get(feat_url, headers=headers)
@@ -185,6 +186,7 @@ class SpotifyAPI:
             A DataFrame containing information about all the tracks in the playlist, including the track ID, name, artist, artist ID, and audio features such as danceability, energy, and tempo.
         """
         offset = 0
+        # TODO: has default limit changed to 50? https://developer.spotify.com/documentation/web-api/reference/get-playlists-tracks
 
         while True:
             subset = self.get_track_subset(playlist_id, offset)
@@ -270,7 +272,7 @@ if __name__ == '__main__':
     spot = SpotifyAPI('us-east-2')
     spot.get_secret('spotify_35')
     spot.get_playlist_features('3ubgXaHeBn1CWLUZPXvqkj')
-    old_tracks, new_tracks = spot.parse_new_tracks(lookback_days=7)
-    new_tracks.to_csv('s3://spotify-net/newer_tracks.csv')
-    spot.delete_tracks(old_tracks)
-    print('Updated')
+    # old_tracks, new_tracks = spot.parse_new_tracks(lookback_days=7)
+    # new_tracks.to_csv('s3://spotify-net/newer_tracks.csv')
+    # spot.delete_tracks(old_tracks)
+    # print('Updated')
