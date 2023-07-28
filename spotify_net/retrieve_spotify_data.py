@@ -161,9 +161,42 @@ class SpotifyAPI:
             'artist id': artist_id,
             })
 
-        track_id_list = ','.join(track_ids)
+        artist_list = track_info['artist id'].tolist()
+
+        # get genres
+        genre_list = []
+        index = 0
+        temp_list = artist_list[index: index+50]
+
+        # TODO: is this loop necessary since I'm already inside of a subset with a limit?
+        for i in range(math.ceil(len(artist_list)/50)):
+            artist_join = ','.join(temp_list)
+            art_url = f'https://api.spotify.com/v1/artists?ids={artist_join}'
+            r_art = requests.get(art_url, headers=self.create_headers())
+            print(r_art.status_code)
+            
+            try:
+                g = [i['genres'] for i in r_art.json()['artists']]
+            except IndexError:
+                g = ['No Genre']
+
+            genre_list.extend(g)
+            index += 50
+            temp_list = artist_list[index: index+50]
+    
+    
+        genre_series = pd.Series(genre_list, index=track_info.index)
+        trimmed_genre_series = genre_series.apply(lambda x: x[:3])
+
+        # Explode the genre series (list-like) into multiple rows and do one-hot encoding
+        genre_series_exploded = trimmed_genre_series.explode()
+        genre_one_hot = pd.get_dummies(genre_series_exploded, prefix='genre')
+        track_info = pd.concat([track_info, genre_one_hot], axis=1)
+
+        # Get audio features
+        track_ids_combined = ','.join(track_ids)
         # TODO: look into 'Audio Analysis' endpoint: https://developer.spotify.com/documentation/web-api/reference/get-audio-analysis
-        feat_url = f'https://api.spotify.com/v1/audio-features?ids={track_id_list}'
+        feat_url = f'https://api.spotify.com/v1/audio-features?ids={track_ids_combined}'
         headers = self.create_headers()
         r_feat = requests.get(feat_url, headers=headers)
         feat_frame = pd.DataFrame(r_feat.json()['audio_features'])
@@ -196,16 +229,10 @@ class SpotifyAPI:
                 break
 
             offset += 100
-
+        
         self.df_tracks = self.df_tracks.drop_duplicates()
 
-    
     def get_artist_info(self, df_tracks, headers):
-        """
-        """
-        pass
-
-    def process_genres(self, df_tracks):
         """
         """
         pass
@@ -267,12 +294,12 @@ class SpotifyAPI:
 
 
 
-# %% ../nbs/00_retrieve_spotify_data.ipynb 14
+# %% ../nbs/00_retrieve_spotify_data.ipynb 15
 if __name__ == '__main__':
     spot = SpotifyAPI('us-east-2')
     spot.get_secret('spotify_35')
     spot.get_playlist_features('3ubgXaHeBn1CWLUZPXvqkj')
-    # old_tracks, new_tracks = spot.parse_new_tracks(lookback_days=7)
-    # new_tracks.to_csv('s3://spotify-net/newer_tracks.csv')
-    # spot.delete_tracks(old_tracks)
-    # print('Updated')
+    old_tracks, new_tracks = spot.parse_new_tracks(lookback_days=7)
+    new_tracks.to_csv('s3://spotify-net/newer_tracks.csv')
+    spot.delete_tracks(old_tracks)
+    print('Updated')

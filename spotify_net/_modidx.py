@@ -33,7 +33,5 @@ d = { 'settings': { 'branch': 'master',
                                                                                                                       'spotify_net/retrieve_spotify_data.py'),
                                                    'spotify_net.retrieve_spotify_data.SpotifyAPI.parse_new_tracks': ( 'retrieve_spotify_data.html#spotifyapi.parse_new_tracks',
                                                                                                                       'spotify_net/retrieve_spotify_data.py'),
-                                                   'spotify_net.retrieve_spotify_data.SpotifyAPI.process_genres': ( 'retrieve_spotify_data.html#spotifyapi.process_genres',
-                                                                                                                    'spotify_net/retrieve_spotify_data.py'),
                                                    'spotify_net.retrieve_spotify_data.SpotifyAPI.refresh_token': ( 'retrieve_spotify_data.html#spotifyapi.refresh_token',
                                                                                                                    'spotify_net/retrieve_spotify_data.py')}}}
