@@ -101,7 +101,7 @@ class LastFmAPI:
         return tracks
 
 
-# %% ../nbs/01_retrieve_last.ipynb 8
+# %% ../nbs/01_retrieve_last.ipynb 6
 if __name__ == '__main__':
     last = LastFmAPI('us-east-1')
     last.get_secret('last_keys')

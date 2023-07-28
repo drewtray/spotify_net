@@ -13,6 +13,7 @@ import math
 import os
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+pd.set_option('display.max_columns', None)
 
 from datetime import date, timedelta
 
@@ -191,6 +192,7 @@ class SpotifyAPI:
         # Explode the genre series (list-like) into multiple rows and do one-hot encoding
         genre_series_exploded = trimmed_genre_series.explode()
         genre_one_hot = pd.get_dummies(genre_series_exploded, prefix='genre')
+        genre_one_hot = genre_one_hot.groupby(genre_one_hot.index).sum()
         track_info = pd.concat([track_info, genre_one_hot], axis=1)
 
         # Get audio features
@@ -231,6 +233,7 @@ class SpotifyAPI:
             offset += 100
         
         self.df_tracks = self.df_tracks.drop_duplicates()
+        self.df_tracks = self.df_tracks.loc[:, ~self.df_tracks.columns.duplicated()]
 
     def get_artist_info(self, df_tracks, headers):
         """
@@ -294,7 +297,7 @@ class SpotifyAPI:
 
 
 
-# %% ../nbs/00_retrieve_spotify_data.ipynb 15
+# %% ../nbs/00_retrieve_spotify_data.ipynb 7
 if __name__ == '__main__':
     spot = SpotifyAPI('us-east-2')
     spot.get_secret('spotify_35')
