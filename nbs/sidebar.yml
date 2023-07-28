@@ -4,3 +4,4 @@ website:
       - index.ipynb
       - 00_retrieve_spotify_data.ipynb
       - 01_retrieve_last.ipynb
+      - 02_prepModel.ipynb
