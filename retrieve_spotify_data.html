@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Build the SpotifyAPI class.">
+
+<title>spotify_net - Spotify API Data Retrieval</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="spotify_net - Spotify API Data Retrieval">
+<meta property="og:description" content="Build the SpotifyAPI class.">
+<meta property="og:site-name" content="spotify_net">
+<meta name="twitter:title" content="spotify_net - Spotify API Data Retrieval">
+<meta name="twitter:description" content="Build the SpotifyAPI class.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">spotify_net</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./retrieve_spotify_data.html">Spotify API Data Retrieval</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Install</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./retrieve_spotify_data.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Spotify API Data Retrieval</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./retrieve_last.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LastFM API Data Retrieval</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./prepmodel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prepare tracks for model endpoint</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#spotifyapi" id="toc-spotifyapi" class="nav-link active" data-scroll-target="#spotifyapi">SpotifyAPI</a></li>
+  <li><a href="#spotifyapi.get_secret" id="toc-spotifyapi.get_secret" class="nav-link" data-scroll-target="#spotifyapi.get_secret">SpotifyAPI.get_secret</a></li>
+  <li><a href="#spotifyapi.create_headers" id="toc-spotifyapi.create_headers" class="nav-link" data-scroll-target="#spotifyapi.create_headers">SpotifyAPI.create_headers</a></li>
+  <li><a href="#spotifyapi.refresh_token" id="toc-spotifyapi.refresh_token" class="nav-link" data-scroll-target="#spotifyapi.refresh_token">SpotifyAPI.refresh_token</a></li>
+  <li><a href="#spotifyapi.get_track_subset" id="toc-spotifyapi.get_track_subset" class="nav-link" data-scroll-target="#spotifyapi.get_track_subset">SpotifyAPI.get_track_subset</a></li>
+  <li><a href="#spotifyapi.get_subset_features" id="toc-spotifyapi.get_subset_features" class="nav-link" data-scroll-target="#spotifyapi.get_subset_features">SpotifyAPI.get_subset_features</a></li>
+  <li><a href="#spotifyapi.get_playlist_features" id="toc-spotifyapi.get_playlist_features" class="nav-link" data-scroll-target="#spotifyapi.get_playlist_features">SpotifyAPI.get_playlist_features</a></li>
+  <li><a href="#spotifyapi.parse_new_tracks" id="toc-spotifyapi.parse_new_tracks" class="nav-link" data-scroll-target="#spotifyapi.parse_new_tracks">SpotifyAPI.parse_new_tracks</a></li>
+  <li><a href="#spotifyapi.delete_tracks" id="toc-spotifyapi.delete_tracks" class="nav-link" data-scroll-target="#spotifyapi.delete_tracks">SpotifyAPI.delete_tracks</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/drewtray/spotify_net/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Spotify API Data Retrieval</h1>
+</div>
+
+<div>
+  <div class="description">
+    Build the SpotifyAPI class.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>Use the class to:</p>
+<ul>
+<li>Pull features for a playlist<br>
+</li>
+<li>Parse playlist tracks by date added<br>
+</li>
+<li>Remove old tracks</li>
+</ul>
+<hr>
+<p><a href="https://github.com/drewtray/spotify_net/blob/master/spotify_net/retrieve_spotify_data.py#L21" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="spotifyapi" class="level3">
+<h3 class="anchored" data-anchor-id="spotifyapi">SpotifyAPI</h3>
+<blockquote class="blockquote">
+<pre><code> SpotifyAPI (region_name)</code></pre>
+</blockquote>
+<p>A class for interacting with the Spotify API.</p>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>region_name</td>
+<td>str</td>
+<td>The name of the AWS region where the secrets manager is located.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/drewtray/spotify_net/blob/master/spotify_net/retrieve_spotify_data.py#L47" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="spotifyapi.get_secret" class="level3">
+<h3 class="anchored" data-anchor-id="spotifyapi.get_secret">SpotifyAPI.get_secret</h3>
+<blockquote class="blockquote">
+<pre><code> SpotifyAPI.get_secret (secret_name)</code></pre>
+</blockquote>
+<p>Retrieves the specified secret from AWS Secrets Manager and sets the corresponding environment variables.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>secret_name</td>
+<td>str</td>
+<td>The name of the secret to retrieve.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/drewtray/spotify_net/blob/master/spotify_net/retrieve_spotify_data.py#L71" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="spotifyapi.create_headers" class="level3">
+<h3 class="anchored" data-anchor-id="spotifyapi.create_headers">SpotifyAPI.create_headers</h3>
+<blockquote class="blockquote">
+<pre><code> SpotifyAPI.create_headers ()</code></pre>
+</blockquote>
+<p>Creates the headers required for making requests to the Spotify API.</p>
+<hr>
+<p><a href="https://github.com/drewtray/spotify_net/blob/master/spotify_net/retrieve_spotify_data.py#L84" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="spotifyapi.refresh_token" class="level3">
+<h3 class="anchored" data-anchor-id="spotifyapi.refresh_token">SpotifyAPI.refresh_token</h3>
+<blockquote class="blockquote">
+<pre><code> SpotifyAPI.refresh_token ()</code></pre>
+</blockquote>
+<p>Refreshes the access token required for making requests to the Spotify API.</p>
+<hr>
+<p><a href="https://github.com/drewtray/spotify_net/blob/master/spotify_net/retrieve_spotify_data.py#L110" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="spotifyapi.get_track_subset" class="level3">
+<h3 class="anchored" data-anchor-id="spotifyapi.get_track_subset">SpotifyAPI.get_track_subset</h3>
+<blockquote class="blockquote">
+<pre><code> SpotifyAPI.get_track_subset (playlist_id, offset)</code></pre>
+</blockquote>
+<p>Retrieves a subset of tracks from the specified Spotify playlist.</p>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>playlist_id</td>
+<td>str</td>
+<td>The ID of the Spotify playlist to retrieve tracks from.</td>
+</tr>
+<tr class="even">
+<td>offset</td>
+<td>int</td>
+<td>The offset to use when retrieving tracks.</td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>list</strong></td>
+<td><strong>A list of track items.</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/drewtray/spotify_net/blob/master/spotify_net/retrieve_spotify_data.py#L137" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="spotifyapi.get_subset_features" class="level3">
+<h3 class="anchored" data-anchor-id="spotifyapi.get_subset_features">SpotifyAPI.get_subset_features</h3>
+<blockquote class="blockquote">
+<pre><code> SpotifyAPI.get_subset_features (track_items)</code></pre>
+</blockquote>
+<p>Given a list of track items, returns a pandas DataFrame containing information about each track, including the track ID, name, artist, artist ID, and audio features such as danceability, energy, and tempo.</p>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>track_items</td>
+<td>list</td>
+<td>A list of track items, where each item is a dictionary containing information about a track.</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>pandas.DataFrame</strong></td>
+<td><strong>A DataFrame containing information about each track, including the track ID, name, artist, artist ID, and audio features such as danceability, energy, and tempo.</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/drewtray/spotify_net/blob/master/spotify_net/retrieve_spotify_data.py#L209" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="spotifyapi.get_playlist_features" class="level3">
+<h3 class="anchored" data-anchor-id="spotifyapi.get_playlist_features">SpotifyAPI.get_playlist_features</h3>
+<blockquote class="blockquote">
+<pre><code> SpotifyAPI.get_playlist_features (playlist_id)</code></pre>
+</blockquote>
+<p>Given a Spotify playlist ID, returns a pandas DataFrame containing information about all the tracks in the playlist, including the track ID, name, artist, artist ID, and audio features such as danceability, energy, and tempo.</p>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>playlist_id</td>
+<td>str</td>
+<td>The ID of the Spotify playlist.</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>pandas.DataFrame</strong></td>
+<td><strong>A DataFrame containing information about all the tracks in the playlist, including the track ID, name, artist, artist ID, and audio features such as danceability, energy, and tempo.</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/drewtray/spotify_net/blob/master/spotify_net/retrieve_spotify_data.py#L243" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="spotifyapi.parse_new_tracks" class="level3">
+<h3 class="anchored" data-anchor-id="spotifyapi.parse_new_tracks">SpotifyAPI.parse_new_tracks</h3>
+<blockquote class="blockquote">
+<pre><code> SpotifyAPI.parse_new_tracks (lookback_days=7)</code></pre>
+</blockquote>
+<p>Sorts tracks based on when they were added and filters out tracks added more than ‘lookback_days’ ago. Returns two DataFrames: one containing the new tracks added within the lookback period, and one containing the old tracks added before the lookback period.</p>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>lookback_days</td>
+<td>int</td>
+<td>7</td>
+<td>The number of days to look back for new tracks. Defaults to 7.</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>pandas.DataFrame</strong></td>
+<td></td>
+<td><strong>A DataFrame containing the old tracks added before the lookback period.</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/drewtray/spotify_net/blob/master/spotify_net/retrieve_spotify_data.py#L273" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="spotifyapi.delete_tracks" class="level3">
+<h3 class="anchored" data-anchor-id="spotifyapi.delete_tracks">SpotifyAPI.delete_tracks</h3>
+<blockquote class="blockquote">
+<pre><code> SpotifyAPI.delete_tracks (tracks_to_delete)</code></pre>
+</blockquote>
+<p>Deletes a batch of tracks from a Spotify playlist.</p>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>tracks_to_delete</td>
+<td>pandas.DataFrame</td>
+<td>A DataFrame containing the tracks to be deleted, where each row represents a track and contains a ‘uri’ column with the URI of the track.</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>None</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
